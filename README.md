@@ -1,4 +1,14 @@
 # Gestionnaire de tâches
+
+### Organisation des dossiers
+- frontend/
+- backend/
+- tests/
+    - /e2e
+    - /unit
+    - integration
+- coverage/
+
 ## Comment lancer l'application
 
 ### Terminal Backend
@@ -25,8 +35,9 @@ password : password
 ```
 
 Test Selenium
-Cela va tester l'url pour savoir si cela marche ou non
-et cela va tester la page login
+- Test de l'url de la page
+- Test du login
+- Test de créer une task 
 
 Workflow
 Va vérifier esLint et cela va dire si oui ou non on peut push sur dev/main
