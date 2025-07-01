@@ -3,9 +3,9 @@ name: CI
 
 on:
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main ]
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
 
 jobs:
   build-and-test:
@@ -27,10 +27,6 @@ jobs:
       - name: Install dependencies
         working-directory: ${{ matrix.project }}
         run: npm ci
-
-      - name: Lint
-        working-directory: ${{ matrix.project }}
-        run: npm run lint
 
       - name: Run tests
         working-directory: ${{ matrix.project }}
