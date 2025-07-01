@@ -1,4 +1,4 @@
-{
+{    
   "name": "taskmanagement",
   "private": true,
   "workspaces": [
@@ -9,6 +9,7 @@
     "test": "cd backend && npm test"
   },
   "devDependencies": {
-    "supertest": "^7.1.1"
+    "supertest": "^7.1.1",
+    "husky": "^9.1.7"
   }
 }
