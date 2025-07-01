@@ -456,4 +456,14 @@
     align-items: flex-start;
     gap: 0.5rem;
   }
+
+  .success-message {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    border: 1px solid #c3e6cb;
+    text-align: center;
+}
 }

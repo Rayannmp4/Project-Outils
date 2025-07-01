@@ -9,8 +9,11 @@ const Register = () => {
     password: '',
     confirmPassword: ''
   });
+
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+
   const { register } = useAuth();
   const navigate = useNavigate();
 
@@ -22,36 +25,50 @@ const Register = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+  e.preventDefault();
+  setLoading(true);
+  setError('');
+  setSuccess('');
 
-    if (formData.password !== formData.confirmPassword) {
-      setError('Les mots de passe ne correspondent pas');
-      setLoading(false);
-      return;
-    }
-
-    const result = await register(formData.email, formData.password, formData.name);
-    
-    if (result.success) {
-      navigate('/dashboard');
-    } else {
-      setError(result.error);
-    }
-    
+  if (formData.password !== formData.confirmPassword) {
+    setError('Les mots de passe ne correspondent pas');
     setLoading(false);
-  };
+    return;
+  }
+
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+
+  if (!passwordRegex.test(formData.password)) {
+    setError("Le mot de passe doit contenir au moins 6 caractères, une lettre et un chiffre");
+    setLoading(false);
+    return;
+  }
+
+  const result = await register(formData.email, formData.password, formData.name);
+  
+  if (result.success) {
+    setSuccess("Inscription réussie ! Redirection...");
+    setTimeout(() => {
+      navigate('/dashboard');
+    }, 2000);
+  } else {
+    setError(result.error);
+  }
+
+  setLoading(false);
+};
+
 
   return (
     <div className="auth-container">
       <form onSubmit={handleSubmit} className="auth-form">
         <h2>Inscription</h2>
-        
+
         {error && <div className="error-message">{error}</div>}
-        
+        {success && <div className="success-message">{success}</div>}
+
         <div className="form-group">
-          <label htmlFor="name">Nom:</label>
+          <label htmlFor="name">Nom :</label>
           <input
             type="text"
             id="name"
@@ -63,7 +80,7 @@ const Register = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="email">Email:</label>
+          <label htmlFor="email">Email :</label>
           <input
             type="email"
             id="email"
@@ -75,7 +92,7 @@ const Register = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="password">Mot de passe:</label>
+          <label htmlFor="password">Mot de passe :</label>
           <input
             type="password"
             id="password"
@@ -87,7 +104,7 @@ const Register = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="confirmPassword">Confirmer le mot de passe:</label>
+          <label htmlFor="confirmPassword">Confirmer le mot de passe :</label>
           <input
             type="password"
             id="confirmPassword"
@@ -99,7 +116,7 @@ const Register = () => {
         </div>
 
         <button type="submit" disabled={loading}>
-          {loading ? 'Inscription...' : 'S\'inscrire'}
+          {loading ? "Inscription..." : "S'inscrire"}
         </button>
 
         <p>
