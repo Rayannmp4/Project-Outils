@@ -1,4 +1,13 @@
 {
+  "name": "taskmanagement",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "test": "cd backend && npm test"
+  },
   "devDependencies": {
     "supertest": "^7.1.1"
   }
