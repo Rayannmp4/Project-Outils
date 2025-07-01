@@ -1,70 +1,31 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+const { Builder, By, until } = require('selenium-webdriver');
 
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
-  const navigate = useNavigate();
+async function testLogin() {
+  const driver = await new Builder().forBrowser('chrome').build();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+  try {
+    console.log("🚀 Ouverture de l'application...");
+    await driver.get('http://localhost:3000');
 
-    const result = await login(email, password);
-    
-    if (result.success) {
-      navigate('/dashboard');
+    console.log("⏳ Remplissage des champs...");
+    await driver.findElement(By.id('email')).sendKeys('admin@test.com');
+    await driver.findElement(By.id('password')).sendKeys('password');
+    await driver.findElement(By.css('button[type="submit"]')).click();
+
+    console.log("🔄 Attente de la redirection vers /dashboard...");
+    await driver.wait(until.urlContains('/dashboard'), 5000);
+
+    const url = await driver.getCurrentUrl();
+    if (url.includes('/dashboard')) {
+      console.log("✅ Connexion réussie !");
     } else {
-      setError(result.error);
+      console.log("❌ Redirection échouée !");
     }
-    
-    setLoading(false);
-  };
+  } catch (error) {
+    console.error("❌ Erreur lors du test :", error.message);
+  } finally {
+    await driver.quit();
+  }
+}
 
-  return (
-    <div className="auth-container">
-      <form onSubmit={handleSubmit} className="auth-form">
-        <h2>Connexion</h2>
-        
-        {error && <div className="error-message">{error}</div>}
-        
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="password">Mot de passe:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-
-        <button type="submit" disabled={loading}>
-          {loading ? 'Connexion...' : 'Se connecter'}
-        </button>
-
-        <p>
-          Pas de compte ? <Link to="/register">S'inscrire</Link>
-        </p>
-      </form>
-    </div>
-  );
-};
-
-export default Login;
+testLogin();
