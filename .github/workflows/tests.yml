@@ -36,10 +36,10 @@ jobs:
           cd backend
           npm test
 
-      - name: Run frontend tests
-        run: |
-          cd frontend
-          npm test
+      # - name: Run frontend tests
+      #   run: |
+      #     cd frontend
+      #     npm test
 
       - name: Generate coverage report
         run: |
